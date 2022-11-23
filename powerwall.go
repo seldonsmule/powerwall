@@ -3,7 +3,6 @@ package powerwall
 import (
 
   "fmt"
-  "reflect"
   "os"
   "encoding/json"
   "sort"
@@ -123,48 +122,6 @@ func (pP *Powerwall) SaveResponseOff(){
 func (pP *Powerwall) SetObject(obj interface{}){
 
   pP.oObject = obj
-
-}
-
-func (pP *Powerwall) helperDumpObject(st interface{}) {
-
-fmt.Println("in helperDumpObject - does not work - fix later")
-
-    return
-
-    val := reflect.ValueOf(st)
-    if val.Kind() == reflect.Ptr {
-        val = val.Elem()
-    }
-    for i := 0; i < val.NumField(); i++ {
-         fmt.Println(val.Type().Field(i).Type.Kind())
-        f := val.Field(i)
-        switch f.Kind() {
-        case reflect.Struct:
-            //fmt.Printf("%v=%v\n", val.Type().Field(i).Name, val.Field(i).Interface())
-            pP.helperDumpObject(f.Interface())
-        case reflect.Slice:
-            for j := 0; j < f.Len(); j++ {
-                pP.helperDumpObject(f.Index(i).Interface())
-            }
-
-        case reflect.String:
-            fmt.Printf("%v=%v\n", val.Type().Field(i).Name, val.Field(i).Interface())
-
-        default:
-         fmt.Printf("default: %s %s %v\n", 
-                val.Type().Field(i).Name, val.Type(), val.Field(i).Interface())
-
-        }
-    }
-
-}
-
-func (pP *Powerwall) DumpObject(){
-
-  fmt.Println("DumpObject()")
-
-  pP.helperDumpObject(pP.oObject)
 
 }
 
