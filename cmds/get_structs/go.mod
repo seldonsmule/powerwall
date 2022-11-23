@@ -1,12 +1,10 @@
 module powerwall/cmds/get_structs
 
-replace github.com/seldonsmule/powerwall => /Users/rxe789/dev/go/src/powerwall
-
-go 1.17
+go 1.19
 
 require (
 	github.com/seldonsmule/logmsg v0.0.0-20210504192739-df66bdf17afb
-	github.com/seldonsmule/powerwall v0.0.0-00010101000000-000000000000
+	github.com/seldonsmule/powerwall v0.0.0-20221123164401-03b22e115610
 )
 
 require (

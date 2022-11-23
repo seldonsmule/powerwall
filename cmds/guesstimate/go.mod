@@ -1,15 +1,11 @@
 module powerwall/cmds/guesstimate
 
-replace github.com/seldonsmule/powerwall => /Users/rxe789/dev/go/src/powerwall
-
-//replace github.com/seldonsmule/simpleconffile => /Users/rxe789/dev/go/src/simpleconffile
-
 go 1.19
 
 require (
 	github.com/seldonsmule/logmsg v0.0.0-20210504192739-df66bdf17afb
-	github.com/seldonsmule/powerwall v0.0.0-00010101000000-000000000000
-	github.com/seldonsmule/simpleconffile v0.0.0-20221121212137-04d5c8330f21
+	github.com/seldonsmule/powerwall v0.0.0-20221123164401-03b22e115610
+	github.com/seldonsmule/simpleconffile v0.0.0-20221122220155-7ed90522ee38
 )
 
 require (
