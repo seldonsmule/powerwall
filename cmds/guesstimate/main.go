@@ -30,6 +30,36 @@ const COMPILE_IN_KEY = "example key 1234"
 
 var gMyconf Configuration
 
+func is_grid_up(pw *powerwall.Powerwall, tokenPtr *string) bool {
+
+   var ss SystemStatus
+
+   pw = powerwall_login_with_tokenfile(false, *tokenPtr)
+
+   pw.SetObject(&ss)
+
+   if(pw == nil){
+     fmt.Println("powerwall_login - bad token??")
+     return true
+   }
+
+   if(!pw.GetStruct("system_status", false)){
+     fmt.Println("Get the endpoint failed - system_status\n")
+     return true
+   }
+
+   // there might be more than one battery pack, but we only need 
+   // to check the 1st one for grid status
+
+/*
+  maxbattery := ss.NominalFullPackEnergy / 1000
+  currentcharge := ss.NominalEnergyRemaining / 1000
+*/
+
+  return true
+
+}
+
 func get_battery_size(pw *powerwall.Powerwall, tokenPtr *string) (float64, float64){
 
    var ss SystemStatus
@@ -54,6 +84,7 @@ func get_battery_size(pw *powerwall.Powerwall, tokenPtr *string) (float64, float
   return maxbattery, currentcharge
 
 }
+
 func get_kWs(pw *powerwall.Powerwall, tokenPtr *string) (float64, float64, float64, float64){
 
       var ma MetersAggregates
@@ -221,6 +252,7 @@ func help(){
   fmt.Println("             -passwd password used with the powerwall")
   fmt.Println("       status - Basic stats on the system")
   fmt.Println("             -sleepupdate if set, status will run in a loop")
+  fmt.Println("       checkgrid - Test if grid power is off")
   fmt.Println()
 
 
@@ -345,6 +377,25 @@ fmt.Printf("cmd=%s\n", *cmdPtr)
         }
       }else{
         print_pw_status(pw, tokenPtr)
+      }
+
+    case "checkgrid":
+
+      readconf(*confPtr)
+
+      pw = powerwall_login_with_userid(false, gMyconf.Userid, gMyconf.Passwd)
+
+      if(pw == nil){
+        fmt.Println("powerwall_login failed")
+        os.Exit(4)
+      }
+
+      if(is_grid_up(pw, tokenPtr)){
+        fmt.Println("Grid is working")
+        os.Exit(0)
+      }else{
+        fmt.Println("Power is out - running of batteries")
+        os.Exit(1)
       }
 
 
