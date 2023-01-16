@@ -13,10 +13,8 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/seldonsmule/logmsg v0.0.0-20210504192739-df66bdf17afb h1:95kjI3oZk07ox8H71emHCOBrzuUCeHUtN4oYNi1SvAk=
 github.com/seldonsmule/logmsg v0.0.0-20210504192739-df66bdf17afb/go.mod h1:WzyIhvnlRPSvfNcRWjhKhAKB0AySXCklr1Xw8xtPqBs=
-github.com/seldonsmule/powerwall v0.0.0-20221123164401-03b22e115610 h1:rXnvUJcDY32YkgiUviMfIfLW/f4VvPPcdSgm4TcLu9g=
-github.com/seldonsmule/powerwall v0.0.0-20221123164401-03b22e115610/go.mod h1:NcvSqJk23JvBFnW2aa4yJfWUyCAV22eVPl8HjW8QGHA=
-github.com/seldonsmule/restapi v0.0.0-20220822130127-c4ef043e22ab h1:sHIGmYgdvSBdJfME6YTL/M6spvGj+46j2VmxOttlH5g=
-github.com/seldonsmule/restapi v0.0.0-20220822130127-c4ef043e22ab/go.mod h1:AOKQTIKHaf8cck/6h2uwv8eAD9foZnyDGnBajY6UReA=
+github.com/seldonsmule/restapi v0.0.0-20230116183924-1983c7b2e712 h1:441z16WTfuIXIiX0VUZGGdEj32AKXpBz/E3cPutxFl8=
+github.com/seldonsmule/restapi v0.0.0-20230116183924-1983c7b2e712/go.mod h1:AOKQTIKHaf8cck/6h2uwv8eAD9foZnyDGnBajY6UReA=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.4.0/go.mod h1:YvHI0jy2hoMjB+UWwv71VJQ9isScKT/TqJzVSSt89Yw=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=

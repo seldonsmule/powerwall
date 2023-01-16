@@ -1,10 +1,10 @@
-module github.com/seldonsmule/powerwall
+module powerwall
 
-go 1.17
+go 1.19
 
 require (
 	github.com/seldonsmule/logmsg v0.0.0-20210504192739-df66bdf17afb
-	github.com/seldonsmule/restapi v0.0.0-20220822130127-c4ef043e22ab
+	github.com/seldonsmule/restapi v0.0.0-20230116183924-1983c7b2e712
 )
 
 require (
