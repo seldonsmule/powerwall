@@ -32,18 +32,16 @@ var gMyconf Configuration
 
 func is_grid_up(pw *powerwall.Powerwall, tokenPtr *string) bool {
 
-   var ss SystemStatus
-
    pw = powerwall_login_with_tokenfile(false, *tokenPtr)
 
-   pw.SetObject(&ss)
-
    if(pw == nil){
-     fmt.Println("powerwall_login - bad token??")
-     return true
-   }
+      fmt.Println("powerwall_login - bad token??")
+      return false
+    }
 
-   if(!pw.GetStruct("system_status", false)){
+   worked, ss := pw.GetSystemStatus()
+
+   if(!worked){
      fmt.Println("Get the endpoint failed - system_status\n")
      return true
    }
@@ -51,10 +49,13 @@ func is_grid_up(pw *powerwall.Powerwall, tokenPtr *string) bool {
    // there might be more than one battery pack, but we only need 
    // to check the 1st one for grid status
 
-/*
+
   maxbattery := ss.NominalFullPackEnergy / 1000
   currentcharge := ss.NominalEnergyRemaining / 1000
-*/
+
+  fmt.Printf("Max battery: %f",  maxbattery)
+  fmt.Printf("Current charge: %f",  currentcharge)
+
 
   return true
 
@@ -62,21 +63,20 @@ func is_grid_up(pw *powerwall.Powerwall, tokenPtr *string) bool {
 
 func get_battery_size(pw *powerwall.Powerwall, tokenPtr *string) (float64, float64){
 
-   var ss SystemStatus
-
    pw = powerwall_login_with_tokenfile(false, *tokenPtr)
 
-   pw.SetObject(&ss)
-
    if(pw == nil){
-     fmt.Println("powerwall_login - bad token??")
-     return -1, -1
-   }
+      fmt.Println("powerwall_login - bad token??")
+      return -1, -1
+    }
 
-   if(!pw.GetStruct("system_status", false)){
+   worked, ss := pw.GetSystemStatus()
+
+   if(!worked){
      fmt.Println("Get the endpoint failed - system_status\n")
      return -1, -1
    }
+
 
   maxbattery := ss.NominalFullPackEnergy / 1000
   currentcharge := ss.NominalEnergyRemaining / 1000
@@ -87,21 +87,21 @@ func get_battery_size(pw *powerwall.Powerwall, tokenPtr *string) (float64, float
 
 func get_kWs(pw *powerwall.Powerwall, tokenPtr *string) (float64, float64, float64, float64){
 
-      var ma MetersAggregates
-
       pw = powerwall_login_with_tokenfile(false, *tokenPtr)
-
-      pw.SetObject(&ma)
 
       if(pw == nil){
         fmt.Println("powerwall_login - bad token??")
         return -1, -1, -1, -1
       }
 
-      if(!pw.GetStruct("metersaggregates", false)){
-        fmt.Println("Get the endpoint failed\n")
+      worked, ma := pw.GetMetersAggregates()
+
+      if(!worked){
+        fmt.Println("Get the endpoint failed - metersaggregates\n")
         return -1, -1, -1, -1
       }
+
+//fmt.Println(ma)
 
   batterykW := ma.Battery.InstantPower / 1000
   housekW := ma.Load.InstantPower / 1000
@@ -113,18 +113,22 @@ func get_kWs(pw *powerwall.Powerwall, tokenPtr *string) (float64, float64, float
 
 func get_percent(pw *powerwall.Powerwall, tokenPtr *string) float64{
 
-  var soe SystemStatusSoe
-
   pw = powerwall_login_with_tokenfile(false, *tokenPtr)
 
-  pw.SetObject(&soe)
+  if(pw == nil){
+     fmt.Println("powerwall_login - bad token??")
+     return -1
+  }
 
-  if(!pw.GetStruct("system_status_soe", false)){
-    fmt.Println("Get the endpoint failed\n")
-    return -1
+  worked, soe := pw.GetSystemStatusSoe()
+
+  if(!worked){
+     fmt.Println("Get the endpoint failed - metersaggregates\n")
+     return -1
   }
 
   return(soe.Percentage)
+
 }
 
 func print_pw_status(pw *powerwall.Powerwall, tokenPtr *string) {
@@ -278,6 +282,7 @@ func readconf(confFile string){
   fmt.Printf("Userid [%v]\n", gMyconf.Userid)
   fmt.Printf("Passwd [%v]\n", gMyconf.Passwd)
 */
+
 }
 
 func main() {

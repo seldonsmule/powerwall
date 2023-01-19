@@ -5,6 +5,8 @@ import (
   "fmt"
   "os"
   "encoding/json"
+  "io/ioutil"
+  "strings"
   "sort"
   "github.com/seldonsmule/restapi"
   "github.com/seldonsmule/logmsg"
@@ -67,42 +69,42 @@ func New(certfile string) *Powerwall {
 
   p.mEndpoints = make(map[string]PW_Endpoints)
 
-  p.mEndpoints["config"] = PW_Endpoints{ "config", "PW_Config", "config", false}
+  p.mEndpoints["config"] = PW_Endpoints{ "config", "Config", "config", false}
 
-  p.mEndpoints["customer"] = PW_Endpoints{ "customer", "PW_Customer", "customer", false}
+  p.mEndpoints["customer"] = PW_Endpoints{ "customer", "Customer", "customer", false}
 
-  p.mEndpoints["devicesvitals"] = PW_Endpoints{ "devices/vitals", "PW_DeviceVitals", "devicevitals", true}
+  p.mEndpoints["devicesvitals"] = PW_Endpoints{ "devices/vitals", "DeviceVitals", "devicevitals", true}
 
-  p.mEndpoints["generators"] = PW_Endpoints{ "generators", "PW_Generators", "generators", false}
+  p.mEndpoints["generators"] = PW_Endpoints{ "generators", "Generators", "generators", false}
 
-  p.mEndpoints["generatorsdisconnecttypes"] = PW_Endpoints{ "generators/disconnect_types", "PW_DisconnectTypes", "generator_disconnect_types", false}
+  p.mEndpoints["generatorsdisconnecttypes"] = PW_Endpoints{ "generators/disconnect_types", "DisconnectTypes", "generator_disconnect_types", false}
 
-  p.mEndpoints["installer"] = PW_Endpoints{ "installer", "PW_Installer", "installer", false}
+  p.mEndpoints["installer"] = PW_Endpoints{ "installer", "Installer", "installer", false}
 
-  p.mEndpoints["installercompanies"] = PW_Endpoints{ "installer/companies", "PW_InstallerCompanies", "installercompanies", false}
+  p.mEndpoints["installercompanies"] = PW_Endpoints{ "installer/companies", "InstallerCompanies", "installercompanies", false}
 
-  p.mEndpoints["login"] = PW_Endpoints{ "login/Basic", "PW_Login", "login", true}
+  p.mEndpoints["login"] = PW_Endpoints{ "login/Basic", "Login", "login", true}
 
-  p.mEndpoints["meters"] = PW_Endpoints{ "meters", "PW_Meters", "meters", false}
+  p.mEndpoints["meters"] = PW_Endpoints{ "meters", "Meters", "meters", false}
 
-  p.mEndpoints["metersaggregates"] = PW_Endpoints{ "meters/aggregates", "PW_MetersAggregates", "metersaggregates", false}
+  p.mEndpoints["metersaggregates"] = PW_Endpoints{ "meters/aggregates", "MetersAggregates", "metersaggregates", false}
 
-  p.mEndpoints["metersreadings"] = PW_Endpoints{ "meters/readings", "PW_MetersReadings", "metersreadings", false}
+  p.mEndpoints["metersreadings"] = PW_Endpoints{ "meters/readings", "MetersReadings", "metersreadings", false}
 
-  p.mEndpoints["metersstatus"] = PW_Endpoints{ "meters/status", "PW_MetersStatus", "metersstatus", false}
+  p.mEndpoints["metersstatus"] = PW_Endpoints{ "meters/status", "MetersStatus", "metersstatus", false}
 
-  p.mEndpoints["networks"] = PW_Endpoints{ "networks", "PW_Networks", "networks", false}
+  p.mEndpoints["networks"] = PW_Endpoints{ "networks", "Networks", "networks", false}
 
-  p.mEndpoints["powerwalls"] = PW_Endpoints{ "powerwalls", "PW_Powerwalls", "powerwalls", false}
+  p.mEndpoints["powerwalls"] = PW_Endpoints{ "powerwalls", "Powerwalls", "powerwalls", false}
 
-  p.mEndpoints["site_info"] = PW_Endpoints{ "site_info", "PW_SiteInfo", "siteinfo", false}
+  p.mEndpoints["site_info"] = PW_Endpoints{ "site_info", "SiteInfo", "siteinfo", false}
 
-  p.mEndpoints["system_status"] = PW_Endpoints{ "system_status", "PW_SystemStatus", "systemstatus", false}
-  p.mEndpoints["system_status_gridfaults"] = PW_Endpoints{ "system_status/grid_faults", "PW_SystemStatusGridfaults", "systemstatus_gridfaults", false}
-  p.mEndpoints["system_status_soe"] = PW_Endpoints{ "system_status/soe", "PW_SystemStatusSoe", "systemstatus_soe", false}
+  p.mEndpoints["system_status"] = PW_Endpoints{ "system_status", "SystemStatus", "systemstatus", false}
+  p.mEndpoints["system_status_gridfaults"] = PW_Endpoints{ "system_status/grid_faults", "SystemStatusGridfaults", "systemstatus_gridfaults", false}
+  p.mEndpoints["system_status_soe"] = PW_Endpoints{ "system_status/soe", "SystemStatusSoe", "systemstatus_soe", false}
 
-  p.mEndpoints["meters_solar"] = PW_Endpoints{ "meters/solar", "PW_MetersSolar", "meters_solar", false}
-  p.mEndpoints["meters_site"] = PW_Endpoints{ "meters/site", "PW_MetersSite", "meters_site", false}
+  p.mEndpoints["meters_solar"] = PW_Endpoints{ "meters/solar", "MetersSolar", "meters_solar", false}
+  p.mEndpoints["meters_site"] = PW_Endpoints{ "meters/site", "MetersSite", "meters_site", false}
 
 
   return p
@@ -307,13 +309,11 @@ func (pP *Powerwall) GetStruct(endpointname string, bstdout bool) bool {
     return false
   }
 
-  if(pP.bDebug){
+ if(pP.bDebug){
     fmt.Println(r.GetResponseBody())
-  }
+ }
 
-  if(!pP.SaveResponseBody(r, sFilename, sStructname, bstdout)){
-  //if(!r.SaveResponseBody(sFilename, sStructname, bstdout)){
-
+  if(!pP.SaveResponseBody(r, sFilename, sStructname, endpointname, bstdout)){
     logmsg.Print(logmsg.Error,"SaveResponseBody failed")
     return(false)
   }
@@ -323,9 +323,11 @@ func (pP *Powerwall) GetStruct(endpointname string, bstdout bool) bool {
 
 //    fmt.Println("Attempting to unmarsal to oObject type: ", reflect.TypeOf(pP.oObject))
 
+//fmt.Printf("--------Type: %T\n", pP.oObject)
     json.Unmarshal(r.BodyBytes, pP.oObject)
 
-    //fmt.Println(pP.oObject)
+//fmt.Println("=========")
+//    fmt.Println(pP.oObject)
 
   }
 
@@ -335,7 +337,7 @@ func (pP *Powerwall) GetStruct(endpointname string, bstdout bool) bool {
 
 }
 
-func (pP *Powerwall) SaveResponseBody(r *restapi.Restapi, sFilename string, sStructname string, bstdout bool) bool{
+func (pP *Powerwall) SaveResponseBody(r *restapi.Restapi, sFilename string, sStructname string, sEndpointname string, bstdout bool) bool{
 
 
   if(!pP.bSaveResponse){
@@ -353,10 +355,55 @@ err := os.MkdirAll(pP.sSaveDirectory, 0755)
     return false
   }
 
-  //pP.SaveResponseBody(pP.sSaveDirectory+"/"+sFilename, sStructname, bstdout)
-  r.SaveResponseBody(pP.sSaveDirectory+"/pw_"+sFilename, sStructname, bstdout)
+  fullname := pP.sSaveDirectory+"/pw_"+sFilename
 
-  
+  //pP.SaveResponseBody(pP.sSaveDirectory+"/"+sFilename, sStructname, bstdout)
+  r.SaveResponseBody(fullname, sStructname, bstdout)
+
+  if(!pP.bRawGetStruct){ // skipping putting a helper function in the file
+
+    fullname = fullname+".go"
+
+    input, err := ioutil.ReadFile(fullname)
+    if err != nil {
+      logmsg.Print(logmsg.Error, err)
+      return false
+    }
+
+    lines := strings.Split(string(input), "\n")
+
+    //newstuff := fmt.Sprintf("package powerwall\n\n"+
+    newstuff := fmt.Sprintf("\n\nimport \"github.com/seldonsmule/logmsg\"\n\n"+
+                  "func (pP *Powerwall) Get%s() (bool, %s){\n\n"+
+                  "  var s %s\n\n"+
+                  "  pP.SetObject(&s)\n\n"+
+                  "  if(!pP.GetStruct(\"%s\", false)){\n"+
+                  "    logmsg.Print(logmsg.Error, \"GetStruct(%s) failed\")\n"+
+                  "    return false, s\n"+
+                  "  }\n\n"+
+                  "  return true, s\n\n"+
+                  "}\n\n", sStructname, sStructname, sStructname, sEndpointname, sEndpointname)
+
+    structstart := fmt.Sprintf("type %s ", sStructname)
+
+    for i, line := range lines {
+      if strings.Contains(line, "package") {
+        lines[i] = "package powerwall"
+      }
+
+      if strings.Contains(line, structstart){
+        lines[i-1] = newstuff
+      }
+    }
+
+    output := strings.Join(lines, "\n")
+    err = ioutil.WriteFile(fullname, []byte(output), 0644)
+    if err != nil {
+      logmsg.Print(logmsg.Error, err)
+      return false
+    }
+
+  } // end if !bRawGetStruct
 
   return true
 
@@ -408,8 +455,7 @@ func (pP *Powerwall) Login(username string, passwd string, bstdout bool) bool{
 
   }
 
-  if(!pP.SaveResponseBody(r, "login", "PW_Login", bstdout)){
-  //if(!r.SaveResponseBody("login", "Login", bstdout)){
+  if(!pP.SaveResponseBody(r, "login", "Login", "login", bstdout)){
 
     logmsg.Print(logmsg.Error,"SaveResponseBody failed")
     return(false)

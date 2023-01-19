@@ -1,0 +1,51 @@
+2023/01/19 16:57:41 main.go:118: INFO | cmdPtr = array
+2023/01/19 16:57:41 main.go:119: INFO | useridPtr = notset
+2023/01/19 16:57:41 main.go:120: INFO | passwdPtr = abc123
+2023/01/19 16:57:41 main.go:121: INFO | endpointPtr = customer
+2023/01/19 16:57:41 main.go:122: INFO | filenamePtr = default
+2023/01/19 16:57:41 main.go:123: INFO | structnamePtr = Default
+2023/01/19 16:57:41 main.go:124: INFO | tokenPtr = pw.token
+2023/01/19 16:57:41 main.go:125: INFO | bstdoutPtr = false
+2023/01/19 16:57:41 main.go:126: INFO | certfilePtr = powerwall.cer
+2023/01/19 16:57:41 main.go:127: INFO | bsleepPtr = false
+2023/01/19 16:57:41 main.go:128: INFO | tail = []
+2023/01/19 16:57:41 main.go:52: INFO | Token:[7GKqVMp51BulTfT150j3_x8nnRrADt85yiNIkAR8W1UiwBPIOniuvOyZBUfadn8JFwLesHU8tC7b2OkJn-adiA==]
+
+2023/01/19 16:57:41 restapi.go:241: INFO | In Restapi New
+2023/01/19 16:57:41 restapi.go:950: WARNING | bJsonOnly set - data not fully processed
+2023/01/19 16:57:41 restapi.go:241: INFO | In Restapi New
+2023/01/19 16:57:41 restapi.go:950: WARNING | bJsonOnly set - data not fully processed
+2023/01/19 16:57:41 powerwall.go:240: WARNING | Skipping - set to hidden - GetStruct for [devicesvitals]
+2023/01/19 16:57:41 restapi.go:241: INFO | In Restapi New
+2023/01/19 16:57:41 restapi.go:950: WARNING | bJsonOnly set - data not fully processed
+2023/01/19 16:57:41 restapi.go:241: INFO | In Restapi New
+2023/01/19 16:57:41 restapi.go:950: WARNING | bJsonOnly set - data not fully processed
+2023/01/19 16:57:41 restapi.go:241: INFO | In Restapi New
+2023/01/19 16:57:41 restapi.go:950: WARNING | bJsonOnly set - data not fully processed
+2023/01/19 16:57:41 restapi.go:241: INFO | In Restapi New
+2023/01/19 16:57:41 restapi.go:950: WARNING | bJsonOnly set - data not fully processed
+2023/01/19 16:57:41 powerwall.go:240: WARNING | Skipping - set to hidden - GetStruct for [login]
+2023/01/19 16:57:41 restapi.go:241: INFO | In Restapi New
+2023/01/19 16:57:41 restapi.go:950: WARNING | bJsonOnly set - data not fully processed
+2023/01/19 16:57:41 restapi.go:241: INFO | In Restapi New
+2023/01/19 16:57:41 restapi.go:950: WARNING | bJsonOnly set - data not fully processed
+2023/01/19 16:57:41 restapi.go:241: INFO | In Restapi New
+2023/01/19 16:57:42 restapi.go:950: WARNING | bJsonOnly set - data not fully processed
+2023/01/19 16:57:42 restapi.go:241: INFO | In Restapi New
+2023/01/19 16:57:42 restapi.go:950: WARNING | bJsonOnly set - data not fully processed
+2023/01/19 16:57:42 restapi.go:241: INFO | In Restapi New
+2023/01/19 16:57:42 restapi.go:950: WARNING | bJsonOnly set - data not fully processed
+2023/01/19 16:57:42 restapi.go:241: INFO | In Restapi New
+2023/01/19 16:57:42 restapi.go:950: WARNING | bJsonOnly set - data not fully processed
+2023/01/19 16:57:42 restapi.go:241: INFO | In Restapi New
+2023/01/19 16:57:42 restapi.go:950: WARNING | bJsonOnly set - data not fully processed
+2023/01/19 16:57:42 restapi.go:241: INFO | In Restapi New
+2023/01/19 16:57:42 restapi.go:950: WARNING | bJsonOnly set - data not fully processed
+2023/01/19 16:57:42 restapi.go:241: INFO | In Restapi New
+2023/01/19 16:57:42 restapi.go:950: WARNING | bJsonOnly set - data not fully processed
+2023/01/19 16:57:42 restapi.go:241: INFO | In Restapi New
+2023/01/19 16:57:43 restapi.go:950: WARNING | bJsonOnly set - data not fully processed
+2023/01/19 16:57:43 restapi.go:241: INFO | In Restapi New
+2023/01/19 16:57:43 restapi.go:950: WARNING | bJsonOnly set - data not fully processed
+2023/01/19 16:57:43 restapi.go:241: INFO | In Restapi New
+2023/01/19 16:57:43 restapi.go:950: WARNING | bJsonOnly set - data not fully processed

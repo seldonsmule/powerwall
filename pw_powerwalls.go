@@ -39,7 +39,10 @@ type Powerwalls struct {
 	Powerwalls                 []struct {
 		PackagePartNumber       string      `json:"PackagePartNumber"`
 		PackageSerialNumber     string      `json:"PackageSerialNumber"`
-		Type                    string      `json:"Type"`
+// egc 1/18/2023
+// changed form Type to Type2 because the autogeneration messed up
+//
+		Type2                    string      `json:"Type"`
 		BcType                  interface{} `json:"bc_type"`
 		CommissioningDiagnostic struct {
 			Alert    bool   `json:"alert"`
