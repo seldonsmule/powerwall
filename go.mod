@@ -1,4 +1,4 @@
-module powerwall
+module github.com/seldonsmule/powerwall
 
 go 1.19
 
