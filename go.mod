@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/seldonsmule/logmsg v0.0.0-20210504192739-df66bdf17afb
-	github.com/seldonsmule/restapi v0.0.0-20230116183924-1983c7b2e712
+	github.com/seldonsmule/restapi v0.0.0-20230121152404-8d586eff11b9
 )
 
 require (
