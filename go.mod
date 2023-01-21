@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/seldonsmule/logmsg v0.0.0-20210504192739-df66bdf17afb
 	github.com/seldonsmule/restapi v0.0.0-20230121152404-8d586eff11b9
+	github.com/seldonsmule/simpleconffile v0.0.0-20221122220155-7ed90522ee38
 )
 
 require (
