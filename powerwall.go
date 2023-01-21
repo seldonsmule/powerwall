@@ -429,6 +429,14 @@ func (pP *Powerwall) GetUrl(endpointname string) string{
 
 func (pP *Powerwall) Login(username string, passwd string, bstdout bool) bool{
 
+  if(pP.bLoggedIn){
+
+    logmsg.Print(logmsg.Info, "Already logged in, skipping")
+
+    return true
+
+  }
+
   r := restapi.NewPost(pP.mEndpoints["login"].Structname, pP.GetUrl("login"))
  
   if(!r.UseCert(pP.sCertfile)){
