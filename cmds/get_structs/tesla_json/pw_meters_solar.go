@@ -48,6 +48,7 @@ type MetersSolar []struct {
 		SerialNumber                      string    `json:"serial_number"`
 		Timeout                           float64   `json:"timeout"`
 		VL2n                              float64   `json:"v_l2n"`
+		Version                           string    `json:"version"`
 	} `json:"Cached_readings"`
 	Connection struct {
 		DeviceSerial string   `json:"device_serial"`

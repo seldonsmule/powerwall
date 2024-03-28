@@ -34,8 +34,8 @@ type Networks []struct {
 		HwAddress  string `json:"hw_address"`
 		Interface  string `json:"interface"`
 		IpNetworks []struct {
-			Ip   string `json:"ip"`
-			Mask string `json:"mask"`
+			Ip   string `json:"IP"`
+			Mask string `json:"Mask"`
 		} `json:"ip_networks"`
 		NetworkName    string  `json:"network_name"`
 		SignalStrength float64 `json:"signal_strength"`

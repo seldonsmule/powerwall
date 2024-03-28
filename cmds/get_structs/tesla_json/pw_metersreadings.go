@@ -22,7 +22,7 @@ func (pP *Powerwall) GetMetersReadings() (bool, MetersReadings){
 
 
 type MetersReadings struct {
-	SynchrometerX struct {
+	Jbl21281Y1F0DPsynchrometerX struct {
 		Data struct {
 			Cts []struct {
 				Ct     float64 `json:"ct"`
@@ -36,8 +36,8 @@ type MetersReadings struct {
 			FirmwareVersion string `json:"firmwareVersion"`
 		} `json:"data"`
 		Error string `json:"error"`
-	} `json:"synchrometerX"`
-	SynchrometerY struct {
+	} `json:"JBL21281Y1F0DPsynchrometerX"`
+	Jbl21281Y1F0DPsynchrometerY struct {
 		Data struct {
 			Cts []struct {
 				Ct     float64 `json:"ct"`
@@ -51,5 +51,5 @@ type MetersReadings struct {
 			FirmwareVersion string `json:"firmwareVersion"`
 		} `json:"data"`
 		Error string `json:"error"`
-	} `json:"synchrometerY"`
+	} `json:"JBL21281Y1F0DPsynchrometerY"`
 }

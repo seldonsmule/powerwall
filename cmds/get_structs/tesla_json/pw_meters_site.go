@@ -51,6 +51,7 @@ type MetersSite []struct {
 		Timeout                           float64   `json:"timeout"`
 		VL1n                              float64   `json:"v_l1n"`
 		VL2n                              float64   `json:"v_l2n"`
+		Version                           string    `json:"version"`
 	} `json:"Cached_readings"`
 	Connection struct {
 		DeviceSerial string   `json:"device_serial"`

@@ -85,6 +85,193 @@ func get_battery_size(pw *powerwall.Powerwall, tokenPtr *string) (float64, float
 
 }
 
+func printMetersData(pw *powerwall.Powerwall, tokenPtr *string) bool{
+
+
+  //fmt.Println(ma)
+
+  bFristTime := true
+
+  var  SiteImportedStart float64
+  var  SiteExportedStart float64
+  var  BattImportedStart float64
+  var  BattExportedStart float64
+  var  SolarImportedStart float64
+  var  SolarExportedStart float64
+  var  LoadImportedStart float64
+  var  LoadExportedStart float64
+
+
+/*
+  fmt.Println("figuring out seconds/minutes stuff")
+
+  fmt.Println(time.Now().Second())
+
+  if(time.Now().Second() != 0){
+
+    st := 60 - time.Now().Second()
+
+    fmt.Println("not 00 wait ", st)
+
+    val := time.Duration(st) * time.Second
+
+    fmt.Println(time.Now())
+    fmt.Println("sleep val: ", val)
+
+    time.Sleep(val)
+
+  }
+
+  fmt.Println(time.Now())
+  fmt.Println("Finally: ", time.Now().Second())
+  */
+
+//  os.Exit(1)
+
+
+
+
+
+  for {
+
+
+    pw = powerwall_login_with_tokenfile(false, *tokenPtr)
+
+    if(pw == nil){
+      fmt.Println("powerwall_login - bad token??")
+      return false
+    }
+
+    worked, ma := pw.GetMetersAggregates()
+
+    if(!worked){
+      fmt.Println("Get the endpoint failed - metersaggregates\n")
+      return false
+    }
+
+    worked, soe := pw.GetSystemStatusSoe()
+
+    if(!worked){
+      fmt.Println("Get the endpoint failed - systemstatussoe\n")
+      return false
+    }
+
+
+    battPercent := soe.Percentage
+
+   
+    battkW := ma.Battery.InstantPower / 1000
+    loadkW := ma.Load.InstantPower / 1000
+    solkW := ma.Solar.InstantPower / 1000
+    sitekW := ma.Site.InstantPower / 1000
+
+    
+
+    //csi := int64(ma.Site.EnergyImported)
+    //cse := int64(ma.Site.EnergyExported)
+    csi := ma.Site.EnergyImported
+    cse := ma.Site.EnergyExported
+
+    cbi := ma.Battery.EnergyImported
+    cbe := ma.Battery.EnergyExported
+
+    csoli := ma.Solar.EnergyImported
+    csole := ma.Solar.EnergyExported
+
+    cli := ma.Load.EnergyImported
+    cle := ma.Load.EnergyExported
+
+    t := time.Now()
+
+    // test if midnight
+    //if(t.Hour() == 9 && t.Minute() == 21){
+    if(t.Hour() == 0 && t.Minute() == 0){
+      fmt.Println("Midnight - reset counters")
+      bFristTime = true
+    }
+
+    if(bFristTime){
+      bFristTime = false
+
+      SiteImportedStart = csi
+      SiteExportedStart = cse
+
+      BattImportedStart = cbi
+      BattExportedStart = cbe
+
+      SolarImportedStart = csoli
+      SolarExportedStart = csole
+
+      LoadImportedStart = cli
+      LoadExportedStart = cle
+
+
+      /*
+      BattImportedStart = BattImported
+      BattExportedStart = BattExported
+      */
+
+    }
+
+    fmt.Println(t.Format("01-02-2006 15:04:05 "))
+    fmt.Printf("          Solar (Solar Roof) kW(%.1f)\n", solkW)
+    fmt.Printf("Site (Grid) kW(%.1f)         Load (Home) kW(%.1f)\n", sitekW, loadkW)
+    fmt.Printf("          Batt (Powerwall) kW(%.1f)\n", battkW)
+    fmt.Printf("          Battery Percentage: %.1f\n", battPercent)
+
+    //fmt.Println("figuring out seconds/minutes stuff")
+
+    fmt.Println(time.Now().Second())
+
+//    if(time.Now().Second() == 0){
+    if(true){
+
+      SiteImported := csi - SiteImportedStart
+      SiteExported := cse - SiteExportedStart
+      SiteDiff := SiteImported - SiteExported
+
+      BattImported := cbi - BattImportedStart
+      BattExported := cbe - BattExportedStart
+      BattDiff := BattImported - BattExported
+
+      SolarImported := csoli - SolarImportedStart
+      SolarExported := csole - SolarExportedStart
+      SolarDiff := SolarImported - SolarExported
+  
+      LoadImported := cli - LoadImportedStart
+      LoadExported := cle - LoadExportedStart
+      LoadDiff := LoadImported - LoadExported
+
+      //fmt.Println(time.Now().Format("01-02-2006 15:04:05 "))
+      fmt.Println(t.Format("01-02-2006 15:04:05 "))
+
+      //  fmt.Printf("Usage: Solar kW [%.1f]\n", solarkW)
+
+      fmt.Printf("Site (Grid) kW(%.1f) StartImport %f StartExport %f CurrentImport %f CurrentExport %f Imported %f Exported %f Diff %f\n", sitekW, SiteImportedStart, SiteExportedStart, csi, cse, SiteImported, SiteExported, SiteDiff)
+      fmt.Printf("Batt (Powerwall) kW(%.1f) StartImport %f StartExport %f CurrentImport %f CurrentExport %f Imported %f Exported %f Diff %f\n", battkW, BattImportedStart, BattExportedStart, cbi, cbe, BattImported, BattExported, BattDiff)
+      fmt.Printf("Solar (Solar Roof) kW(%.1f) StartImport %f StartExport %f CurrentImport %f CurrentExport %f Imported %f Exported %f Diff %f\n", solkW, SolarImportedStart, SolarExportedStart, csoli, csole, SolarImported, SolarExported, SolarDiff)
+      fmt.Printf("Load (Home) kW(%.1f) StartImport %f StartExport %f CurrentImport %f CurrentExport %f Imported %f Exported %f Diff %f\n", loadkW, LoadImportedStart, LoadExportedStart, cli, cle, LoadImported, LoadExported, LoadDiff)
+      fmt.Printf("Battery Percentage: %.1f\n", battPercent)
+
+
+
+    } // end if seconds == 0
+
+    fmt.Println("---------------------------------------------")
+
+    //time.Sleep(1 * time.Minute)
+    val := time.Duration(1) * time.Second
+
+    //fmt.Println(time.Now())
+    //fmt.Println("sleep val: ", val)
+    time.Sleep(val)
+
+  } // for
+
+
+  return true
+}
+
 func get_kWs(pw *powerwall.Powerwall, tokenPtr *string) (float64, float64, float64, float64){
 
       pw = powerwall_login_with_tokenfile(false, *tokenPtr)
@@ -356,6 +543,20 @@ fmt.Printf("cmd=%s\n", *cmdPtr)
         fmt.Println("powerwall_login failed")
         os.Exit(4)
       }
+
+    case "metersdata":
+      fmt.Println("do metersdata")
+
+      readconf(*confPtr)
+
+      pw = powerwall_login_with_userid(false, gMyconf.Userid, gMyconf.Passwd)
+
+      if(pw == nil){
+        fmt.Println("powerwall_login failed")
+        os.Exit(4)
+      }
+
+      printMetersData(pw, tokenPtr)
 
     case "status":
 
